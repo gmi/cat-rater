@@ -138,3 +138,17 @@ def get_random_cat(cursor):
 @mysql_connection()
 def increment_rating(cursor, ID):
     cursor.execute(f"UPDATE cat_ratings SET Rating = Rating + 1 WHERE ID = {ID}")
+
+@mysql_connection_with_return()
+def get_random_cat(cursor):
+    cursor.execute("SELECT * FROM cat_ratings ORDER BY RAND() LIMIT 1")
+    return cursor.fetchone()
+
+@mysql_connection()
+def increment_rating(cursor, ID):
+    cursor.execute("UPDATE cat_ratings SET Rating = Rating + 1 WHERE ID = %s", (ID,))
+
+@mysql_connection_with_return()
+def get_cat_by_id(cursor, cat_id):
+    cursor.execute("SELECT * FROM cat_ratings WHERE ID = %s", (cat_id,))
+    return cursor.fetchone()

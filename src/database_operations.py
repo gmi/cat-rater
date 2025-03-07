@@ -3,6 +3,7 @@ import os
 import mysql.connector
 import mysql.connector.cursor
 import random
+from datetime import datetime
 
 load_dotenv()
 
@@ -97,6 +98,15 @@ def create_tables(cursor):
             PRIMARY KEY (ID)
         ) 
     ''')
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS vote_logs (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            ip_address VARCHAR(45) NOT NULL,
+            cat_id INT NOT NULL,
+            vote_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            INDEX (ip_address, cat_id)
+        )
+    ''')
     paths = get_all_cat_pics(directory)
     data = [(i, path, 0) for i, path in enumerate(paths)]
     
@@ -152,3 +162,39 @@ def increment_rating(cursor, ID):
 def get_cat_by_id(cursor, cat_id):
     cursor.execute("SELECT * FROM cat_ratings WHERE ID = %s", (cat_id,))
     return cursor.fetchone()
+
+@mysql_connection_with_return()
+def log_vote(cursor, ip_address, cat_id):
+    cursor.execute('''
+        INSERT INTO vote_logs (ip_address, cat_id)
+        VALUES (%s, %s)
+    ''', (ip_address, cat_id))
+
+@mysql_connection_with_return()
+def get_last_vote_time(cursor, ip_address):
+    cursor.execute('''
+        SELECT UNIX_TIMESTAMP(MAX(vote_time)) 
+        FROM vote_logs 
+        WHERE ip_address = %s
+    ''', (ip_address,))
+    result = cursor.fetchone()[0]
+    return result or 0
+
+@mysql_connection_with_return()
+def get_last_cat_vote_time(cursor, ip_address, cat_id):
+    cursor.execute('''
+        SELECT UNIX_TIMESTAMP(MAX(vote_time)) 
+        FROM vote_logs 
+        WHERE ip_address = %s AND cat_id = %s
+    ''', (ip_address, cat_id))
+    result = cursor.fetchone()[0]
+    return result or 0
+
+@mysql_connection_with_return()
+def get_top_100_cats_by_rating(cursor):
+    cursor.execute('''
+        SELECT * FROM cat_ratings
+        ORDER BY Rating DESC
+        LIMIT 100
+    ''')
+    return cursor.fetchall()

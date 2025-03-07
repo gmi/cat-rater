@@ -1,12 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <link rel="stylesheet" href="../static/css/leaderboard.css">
-        <title>Cat Images</title>
-    </head>
-    <body>
-        <div class="navbar">
-            <a href="/" class="navbar-link">rate</a>
+<head>
+    <link rel="stylesheet" href="../static/css/leaderboard.css">
+    <title>Cat Images</title>
+</head>
+<body>
+    <div class="navbar">
+        <a href="/" class="navbar-link">Rate</a>
+    </div>
+
+    <div class="grid-container">
+        {% for i in range(data|length) %}
+        <div class="grid-item {% if loop.index <= 3 %}special{% endif %}" onclick="openModal('{{ data[i][0] }}')">
+            <img src="../static/cats/{{ data[i][0] }}" alt="Cat Image">
+            <div class="num">{{ loop.index }}</div>
+            <div class="rating">Rating: {{ data[i][1] }}</div>
         </div>
-    </body>
+        {% endfor %}
+    </div>
+
+    <!-- Modal -->
+    <div id="imageModal" class="modal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <img class="modal-content" id="modalImage">
+        <div id="caption"></div>
+    </div>
+
+    <script src="../static/js/modal.js"></script>
+</body>
+<script>
+    function openModal(imageSrc) {
+    const modal = document.getElementById("imageModal");
+    const modalImage = document.getElementById("modalImage");
+    const caption = document.getElementById("caption");
+
+    modal.style.display = "flex";
+    modalImage.src = `../static/cats/${imageSrc}`;
+    caption.textContent = imageSrc; // You can customize this as needed
+}
+
+function closeModal() {
+    const modal = document.getElementById("imageModal");
+    modal.style.display = "none";
+}
+
+</script>
 </html>

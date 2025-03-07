@@ -1,0 +1,70 @@
+body {
+    font-family: 'Verdana', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #ffe6f1;
+}
+
+.navbar {
+    background-color: #ff66b2;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: right;
+    gap: 20px;
+    border-bottom: 3px solid #ff3399;
+}
+
+.navbar-link {
+    color: white;
+    text-decoration: none;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 30px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.navbar-link:hover {
+    background-color: #ff3399;
+    transform: scale(1.1); 
+}
+
+.image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+.cat-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.cat-image {
+    max-width: 45%;
+    height: auto;
+    border: 5px solid #ff66b2;
+    border-radius: 15px;
+    object-fit: contain;
+}
+
+.vote-button {
+    background-color: #ff66b2;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.vote-button:hover {
+    background-color: #ff3399;
+    transform: scale(1.1);
+}

@@ -2,5 +2,26 @@
 <html lang="en">
     <head>
         <link rel="stylesheet" href="../static/css/index.css">
+        <title>Cat Images</title>
     </head>
+    <body>
+        <div class="navbar">
+            <a href="/leaderboard" class="navbar-link">leaderboard</a>
+        </div>
+        <div class="image-container">
+            <div class="cat-wrapper">
+                <img src="../static/cats/{{data[0]}}" alt="Cat 1" class="cat-image">
+                <button class="vote-button" onclick="vote('cat1')">Vote for Cat 1</button>
+            </div>
+            <div class="cat-wrapper">
+                <img src="../static/cats/{{data[1]}}" alt="Cat 2" class="cat-image">
+                <button class="vote-button" onclick="vote('cat2')">Vote for Cat 2</button>
+            </div>
+        </div>
+        <script>
+            function vote(cat) {
+                alert("You voted for " + cat + "!");
+            }
+        </script>
+    </body>
 </html>

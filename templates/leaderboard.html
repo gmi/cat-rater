@@ -12,7 +12,7 @@
     <div class="grid-container">
         {% for i in range(data|length) %}
         <div class="grid-item {% if loop.index <= 3 %}special{% endif %}" onclick="openModal('{{ data[i][0] }}')">
-            <img src="http://46.202.140.4:5000/static/cats/{{ data[i][0] }}" alt="Cat Image">
+            <img src="https://46.202.140.4:5000/static/cats/{{ data[i][0] }}" alt="Cat Image">
             <div class="num">{{ loop.index }}</div>
             <div class="rating">Rating: {{ data[i][1] }}</div>
         </div>

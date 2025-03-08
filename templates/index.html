@@ -18,13 +18,27 @@
                 <button class="vote-button" data-cat-id="{{ data[1][0] }}">Vote for Cat 2</button>
             </div>
         </div>
+        
+        <div id="popup" class="popup">Voting...</div>
+        
         <script>
             document.querySelectorAll('.vote-button').forEach(button => {
                 button.addEventListener('click', function() {
                     const catId = this.getAttribute('data-cat-id');
+                    showPopup();
                     vote(catId);
                 });
             });
+
+            function showPopup() {
+                const popup = document.getElementById('popup');
+                popup.style.display = 'block';
+            }
+
+            function hidePopup() {
+                const popup = document.getElementById('popup');
+                popup.style.display = 'none';
+            }
 
             function vote(catId) {
                 fetch('/vote', {
@@ -35,13 +49,17 @@
                     body: `cat_id=${encodeURIComponent(catId)}`
                 })
                 .then(response => {
+                    hidePopup();
                     if (response.ok) {
                         window.location.reload();
                     } else {
                         response.text().then(text => alert(text));
                     }
                 })
-                .catch(error => alert('Error: ' + error));
+                .catch(error => {
+                    hidePopup();
+                    alert('Error: ' + error);
+                });
             }
         </script>
     </body>

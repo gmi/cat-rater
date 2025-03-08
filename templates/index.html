@@ -5,62 +5,69 @@
         <title>Cat Images</title>
     </head>
     <body>
-        <div class="navbar">
-            <a href="/leaderboard" class="navbar-link">leaderboard</a>
+      <div class="navbar">
+        <a href="/leaderboard" class="navbar-link">leaderboard</a>
+      </div>
+      <div class="image-container">
+        <div class="cat-wrapper">
+            <img src="https://46.202.140.4/static/cats/{{ data[0][1] }}" alt="Cat 1" class="cat-image">
+            <button class="vote-button" data-cat-id="{{ data[0][0] }}">Vote for Cat 1</button>
         </div>
-        <div class="image-container">
-            <div class="cat-wrapper">
-                <img src="https://46.202.140.4/static/cats/{{ data[0][1] }}" alt="Cat 1" class="cat-image">
-                <button class="vote-button" data-cat-id="{{ data[0][0] }}">Vote for Cat 1</button>
-            </div>
-            <div class="cat-wrapper">
-                <img src="https://46.202.140.4/static/cats/{{ data[1][1] }}" alt="Cat 2" class="cat-image">
-                <button class="vote-button" data-cat-id="{{ data[1][0] }}">Vote for Cat 2</button>
-            </div>
+        <div class="cat-wrapper">
+            <img src="https://46.202.140.4/static/cats/{{ data[1][1] }}" alt="Cat 2" class="cat-image">
+            <button class="vote-button" data-cat-id="{{ data[1][0] }}">Vote for Cat 2</button>
         </div>
-        
-        <div id="popup" class="popup">Voting...</div>
-        
-        <script>
-            document.querySelectorAll('.vote-button').forEach(button => {
-                button.addEventListener('click', function() {
-                    const catId = this.getAttribute('data-cat-id');
-                    showPopup();
-                    vote(catId);
-                });
+      </div>
+  
+      <!-- Popup overlay element -->
+      <div id="popup" class="popup-overlay" style="display: none;">
+        <div class="popup-content">Voting...</div>
+      </div>
+  
+      <script>
+        // Attach event listeners to each vote button
+        document.querySelectorAll('.vote-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const catId = this.getAttribute('data-cat-id');
+                vote(catId);
             });
-
-            function showPopup() {
-                const popup = document.getElementById('popup');
-                popup.style.display = 'block';
-            }
-
-            function hidePopup() {
-                const popup = document.getElementById('popup');
-                popup.style.display = 'none';
-            }
-
-            function vote(catId) {
-                fetch('/vote', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: `cat_id=${encodeURIComponent(catId)}`
-                })
-                .then(response => {
-                    hidePopup();
-                    if (response.ok) {
-                        window.location.reload();
-                    } else {
-                        response.text().then(text => alert(text));
-                    }
-                })
-                .catch(error => {
-                    hidePopup();
-                    alert('Error: ' + error);
-                });
-            }
-        </script>
+        });
+  
+        // Display the popup overlay
+        function showPopup() {
+            document.getElementById('popup').style.display = 'flex';
+        }
+  
+        // Hide the popup overlay
+        function hidePopup() {
+            document.getElementById('popup').style.display = 'none';
+        }
+  
+        // Vote function that shows the popup and processes the vote
+        function vote(catId) {
+            showPopup();
+            fetch('/vote', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `cat_id=${encodeURIComponent(catId)}`
+            })
+            .then(response => {
+                if (response.ok) {
+                    window.location.reload();
+                } else {
+                    response.text().then(text => {
+                        alert(text);
+                        hidePopup();
+                    });
+                }
+            })
+            .catch(error => {
+                alert('Error: ' + error);
+                hidePopup();
+            });
+        }
+      </script>
     </body>
-</html>
+  </html>
